@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 1: Famous Mistakes & Regrets</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Outfit:wght@400;700;900&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; background-color: #faf5ff; color: #0f172a; scroll-behavior: smooth;}
+        .font-display { font-family: 'Outfit', sans-serif; }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 40px -10px rgba(88, 28, 135, 0.08);
+        }
+
+        .nav-item { transition: all 0.2s ease-in-out; position: relative; }
+        .nav-item.active { background-color: #f3e8ff; color: #7e22ce; font-weight: 700; }
+        .nav-item.active::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background-color: #7e22ce; border-radius: 4px 0 0 4px;}
+
+        .section-content { display: none; animation: fadeIn 0.4s ease-out forwards; }
+        .section-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-primary { background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); color: white; transition: all 0.15s ease; box-shadow: 0 4px 6px -1px rgba(126, 34, 206, 0.3); }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 8px -1px rgba(126, 34, 206, 0.4); }
+        .btn-primary:active { transform: scale(0.98); }
+
+        .btn-external { background: #3b0764; color: white; transition: all 0.2s ease; border: 1px solid #581c87; }
+        .btn-external:hover { background: #2e054e; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2); }
+
+        .theory-card { background: white; border: 1px solid #e9d5ff; border-radius: 1.5rem; padding: 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); margin-bottom: 1.5rem; transition: transform 0.2s, box-shadow 0.2s;}
+        .theory-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+        .theory-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1rem; }
+
+        .mcq-opt { display: flex; align-items: center; gap: 12px; padding: 1rem; border: 2px solid #e9d5ff; border-radius: 1rem; cursor: pointer; transition: all 0.2s; font-size: 1.05rem; background: white; font-weight: 500; }
+        .mcq-opt:hover { background: #faf5ff; border-color: #d8b4fe; }
+        .mcq-opt.selected { border-color: #a855f7; background: #f3e8ff; color: #581c87; }
+        .mcq-opt.correct { border-color: #10b981; background: #ecfdf5; color: #047857; }
+        .mcq-opt.wrong { border-color: #ef4444; background: #fef2f2; color: #b91c1c; }
+
+        .fb-box { border-radius: 0.75rem; padding: 1rem; font-size: 0.95rem; line-height: 1.6; margin-top: 1rem; font-weight: 600; display: none; }
+        .fb-correct { background: #ecfdf5; border-left: 4px solid #10b981; color: #065f46; display: block; animation: fadeIn 0.3s;}
+        .fb-wrong { background: #fef2f2; border-left: 4px solid #ef4444; color: #991b1b; display: block; animation: fadeIn 0.3s;}
+
+        .prompt-box { background: #1e293b; border-radius: 1rem; padding: 1.5rem; position: relative; margin-bottom: 1.5rem; border-left: 4px solid #a855f7; }
+        .prompt-text { color: #f8fafc; font-family: ui-monospace, monospace; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; }
+        .copy-btn { position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.1); color: white; padding: 0.4rem 0.8rem; border-radius: 0.5rem; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover { background: rgba(255,255,255,0.2); }
+        .copy-btn.copied { background: #10b981; }
+
+        /* Draggables */
+        .selectable-word.selected { background-color: #a855f7; color: white; border-color: #a855f7; transform: scale(1.05); }
+        .drop-zone.active-target { border-color: #f59e0b; background-color: #fef3c7; }
+        
+        /* Matching Game */
+        .match-card { transition: all 0.2s; cursor: pointer; border: 2px solid #e2e8f0; }
+        .match-card:hover { border-color: #a855f7; background: #faf5ff; }
+        .match-card.selected { border-color: #a855f7; background: #f3e8ff; box-shadow: 0 0 0 4px rgba(168,85,247,0.2); }
+        .match-card.matched { border-color: #10b981; background: #ecfdf5; color: #065f46; pointer-events: none; opacity: 0.7; }
+        .match-card.error { border-color: #ef4444; background: #fef2f2; animation: shake 0.4s; }
+
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes floatUp { 0% { opacity: 1; transform: translate(-50%, -50%) scale(0.5); } 50% { transform: translate(-50%, -100px) scale(1.2); } 100% { opacity: 0; transform: translate(-50%, -150px) scale(1); } }
+        
+        .spinner { animation: spin 1s infinite linear; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="h-screen flex overflow-hidden">
+
+    <div id="toast" class="fixed bottom-5 right-5 text-white px-6 py-3 rounded-xl shadow-2xl font-bold transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-2">
+        <i id="toast-icon" class="fa-solid fa-info-circle"></i> <span id="toast-msg">Notification</span>
+    </div>
+
+    <aside class="w-72 glass-panel border-r border-purple-100 flex flex-col justify-between hidden md:flex z-20 relative bg-white/90">
+        <div>
+            <div class="p-6 bg-gradient-to-b from-purple-50 to-transparent border-b border-purple-100">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-purple-600 text-white text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-wider">B1+</span>
+                </div>
+                <h1 class="text-xl font-black text-slate-800 flex items-center gap-2 font-display">
+                    <i class="fa-solid fa-clock-rotate-left text-purple-600"></i> Pre-Ind 3.1
+                </h1>
+                <p class="text-xs text-slate-600 mt-1 font-semibold">Mistakes & Regrets</p>
+            </div>
+            <nav class="mt-4 flex flex-col gap-1 px-2 overflow-y-auto max-h-[calc(100vh-200px)]">
+                <button class="nav-item active text-left px-4 py-3 text-sm flex items-center gap-3 rounded-lg" data-target="sec-overview"><i class="fa-solid fa-bullseye text-slate-400 w-4"></i> Overview & Agenda</button>
+                <button class="nav-item text-left px-4 py-3 text-sm flex items-center gap-3 rounded-lg" data-target="sec-warmup"><i class="fa-solid fa-fire text-slate-400 w-4"></i> Warm-up Discussion</button>
+                <button class="nav-item text-left px-4 py-3 text-sm flex items-center gap-3 rounded-lg" data-target="sec-vocab"><i class="fa-solid fa-magnifying-glass text-slate-400 w-4"></i> Extended Phrasal Verbs</button>
+                <button class="nav-item text-left px-4 py-3 text-sm flex items-center gap-3 rounded-lg" data-target="sec-grammar"><i class="fa-solid fa-wrench text-slate-400 w-4"></i> Grammar Hub (15 Drills)</button>
+                <button class="nav-item text-left px-4 py-3 text-sm flex items-center gap-3 rounded-lg" data-target="sec-reading"><i class="fa-solid fa-book-open text-slate-400 w-4"></i> Famous Blunders (Pair Task)</button>
+                <button class="nav-item text-left px-4 py-3 text-sm flex items-center gap-3 rounded-lg" data-target="sec-speaking"><i class="fa-solid fa-robot text-slate-400 w-4"></i> AI Conversational Chat</button>
+                <button class="nav-item text-left px-4 py-3 text-sm flex items-center gap-3 rounded-lg font-semibold text-purple-800 bg-purple-50 border border-purple-200" data-target="sec-final"><i class="fa-solid fa-flag-checkered text-purple-600 w-4"></i> The Final Arena</button>
+            </nav>
+        </div>
+        <div class="p-6 border-t border-purple-100 bg-white">
+            <div class="bg-purple-50 rounded-xl p-4 border border-purple-200 text-center shadow-inner relative">
+                <p class="text-[10px] text-purple-700 font-bold uppercase tracking-widest mb-1">Class XP</p>
+                <div class="text-3xl font-black text-purple-900 flex justify-center items-center gap-2 font-display">
+                    <i class="fa-solid fa-bolt text-yellow-500"></i> <span id="xp-counter">0</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-full overflow-y-auto relative bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+        
+        <header class="md:hidden bg-white p-4 border-b border-purple-200 flex justify-between items-center sticky top-0 z-30 shadow-sm">
+            <h1 class="font-black text-lg text-slate-800 font-display"><i class="fa-solid fa-clock-rotate-left text-purple-600"></i> Class 1</h1>
+            <div class="flex items-center gap-2 font-black text-purple-700">
+                <i class="fa-solid fa-bolt text-yellow-500"></i> <span id="xp-counter-mobile">0</span>
+            </div>
+        </header>
+
+        <div class="p-6 md:p-10 max-w-4xl mx-auto w-full pb-24" id="content-container">
+            
+            <section id="sec-overview" class="section-content active">
+                <div class="mb-8">
+                    <span class="bg-fuchsia-100 text-fuchsia-800 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-fuchsia-200 shadow-sm">Phase 0: Introduction</span>
+                    <h2 class="text-4xl font-black mt-5 mb-3 tracking-tight text-slate-900 font-display">Looking Back:<br>Mistakes & Regrets</h2>
+                    <p class="text-slate-600 text-lg font-medium leading-relaxed max-w-3xl">History is full of terrible decisions, and our personal lives are too! Today, we will explore famous blunders, dramatically expand your phrasal verbs, and learn exactly how to criticize and express regrets.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-10">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                        <div class="w-14 h-14 bg-fuchsia-100 text-fuchsia-600 rounded-2xl flex items-center justify-center text-2xl mb-6"><i class="fa-solid fa-bullseye"></i></div>
+                        <h3 class="text-2xl font-black text-slate-800 mb-4 font-display">Class Objectives</h3>
+                        <ul class="space-y-4 text-slate-600 text-sm font-medium">
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-green-500 mt-1"></i> <span><strong>Evaluate</strong> past situations and express regrets confidently in conversation.</span></li>
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-green-500 mt-1"></i> <span><strong>Master Grammar:</strong> Deeply understand when and why to use <em>should have</em> / <em>shouldn't have</em>.</span></li>
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-green-500 mt-1"></i> <span><strong>Expand Vocabulary:</strong> Master 15 phrasal verbs related to mistakes, discovery, and outcomes.</span></li>
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-check text-green-500 mt-1"></i> <span><strong>AI Guided Speaking:</strong> Maintain a fluid conversation with an AI about personal mistakes.</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-900 text-white p-8 rounded-3xl border border-slate-800 shadow-xl relative overflow-hidden">
+                        <div class="absolute -right-6 -bottom-6 opacity-5"><i class="fa-regular fa-calendar-check text-9xl"></i></div>
+                        <div class="w-14 h-14 bg-slate-800 text-slate-300 rounded-2xl flex items-center justify-center text-2xl mb-6 relative z-10"><i class="fa-regular fa-list-alt"></i></div>
+                        <h3 class="text-2xl font-black mb-4 font-display relative z-10">Today's Agenda</h3>
+                        <div class="space-y-4 relative z-10 text-sm">
+                            <div class="flex items-center justify-between border-b border-slate-700 pb-2">
+                                <span class="font-bold text-fuchsia-400">1. Warm-up & Idioms</span>
+                                <span class="text-[10px] font-bold text-slate-400 bg-slate-800 px-2 py-1 rounded tracking-widest uppercase">10 mins</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b border-slate-700 pb-2">
+                                <span class="font-bold text-blue-400">2. Vocabulary (15 Verbs)</span>
+                                <span class="text-[10px] font-bold text-slate-400 bg-slate-800 px-2 py-1 rounded tracking-widest uppercase">20 mins</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b border-slate-700 pb-2">
+                                <span class="font-bold text-emerald-400">3. Grammar Hub & AI Check</span>
+                                <span class="text-[10px] font-bold text-slate-400 bg-slate-800 px-2 py-1 rounded tracking-widest uppercase">30 mins</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b border-slate-700 pb-2">
+                                <span class="font-bold text-rose-400">4. Reading & Pair Task</span>
+                                <span class="text-[10px] font-bold text-slate-400 bg-slate-800 px-2 py-1 rounded tracking-widest uppercase">20 mins</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b border-slate-700 pb-2">
+                                <span class="font-bold text-teal-400">5. Conversational AI</span>
+                                <span class="text-[10px] font-bold text-slate-400 bg-slate-800 px-2 py-1 rounded tracking-widest uppercase">15 mins</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-10">
+                    <button onclick="navigateTo('sec-warmup');" class="btn-primary py-4 px-10 rounded-xl font-black text-lg transition transform hover:scale-105 shadow-xl">Start Class: Warm-up <i class="fa-solid fa-arrow-right ml-2"></i></button>
+                </div>
+            </section>
+
+            <section id="sec-warmup" class="section-content">
+                <div class="mb-8">
+                    <span class="bg-purple-100 text-purple-800 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-purple-200 shadow-sm">Phase 1: Activation</span>
+                    <h2 class="text-4xl font-black mt-5 mb-3 tracking-tight text-slate-900 font-display">Let's Talk About Regrets</h2>
+                    <p class="text-slate-600 text-lg font-medium leading-relaxed max-w-3xl">Before we look at history's biggest mistakes, let's talk about our own. Spin the wheel to get a conversation starter, then learn some essential expressions.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <!-- Discussion Spinner -->
+                    <div class="bg-slate-900 rounded-3xl p-8 border border-slate-800 text-center shadow-xl relative overflow-hidden flex flex-col justify-center items-center">
+                        <div class="w-16 h-16 bg-purple-500/20 text-purple-400 rounded-full flex items-center justify-center text-3xl mb-4"><i class="fa-solid fa-comments"></i></div>
+                        <h3 class="text-xl font-black text-white mb-6">Class Discussion Generator</h3>
+                        
+                        <div class="min-h-[120px] flex items-center justify-center w-full bg-slate-800 rounded-2xl p-6 border border-slate-700 mb-6 relative">
+                            <p id="spin-text" class="text-xl font-medium text-slate-300 font-serif italic text-center">"Click spin to get your question!"</p>
+                            <div id="spin-overlay" class="absolute inset-0 bg-slate-800/80 rounded-2xl flex items-center justify-center hidden">
+                                <i class="fa-solid fa-circle-notch spinner text-purple-500 text-4xl"></i>
+                            </div>
+                        </div>
+
+                        <button onclick="spinDiscussion()" class="btn-primary py-3 px-8 rounded-xl font-bold shadow-lg w-full flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-arrows-rotate"></i> Spin Question
+                        </button>
+                    </div>
+
+                    <!-- Intro Idioms -->
+                    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm">
+                        <div class="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+                            <div class="w-10 h-10 bg-rose-100 text-rose-500 rounded-lg flex items-center justify-center"><i class="fa-solid fa-lightbulb"></i></div>
+                            <h3 class="text-xl font-black text-slate-800">Essential Expressions</h3>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 hover:border-purple-200 transition">
+                                <p class="font-black text-purple-700 text-lg mb-1">"Hindsight is 20/20"</p>
+                                <p class="text-sm text-slate-600">It's easy to know the right thing to do <em>after</em> something has already happened.</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 hover:border-purple-200 transition">
+                                <p class="font-black text-rose-600 text-lg mb-1">"Don't cry over spilled milk"</p>
+                                <p class="text-sm text-slate-600">Don't be sad about a mistake that cannot be fixed or undone.</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 hover:border-purple-200 transition">
+                                <p class="font-black text-blue-600 text-lg mb-1">"To kick yourself"</p>
+                                <p class="text-sm text-slate-600">To be very angry at yourself because you made a stupid mistake. <em>"I'm kicking myself for not buying it."</em></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="sec-vocab" class="section-content">
+                <div class="mb-6">
+                    <span class="bg-blue-100 text-blue-800 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-blue-200 shadow-sm">Phase 2: Core Vocabulary</span>
+                    <h2 class="text-3xl font-black mt-4 mb-2 text-slate-900 font-display">15 Verbs of Mistakes & Discovery</h2>
+                    <p class="text-slate-600 text-lg mb-6">We've expanded your list! Review these 15 phrasal verbs, then complete the two challenges below.</p>
+                </div>
+
+                <!-- 15 Phrasal Verbs Grid -->
+                <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm mb-10">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3" id="vocab-grid">
+                        <!-- JS Injected -->
+                    </div>
+                </div>
+
+                <!-- Activity 1: Detective Game -->
+                <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-md relative overflow-hidden mb-10">
+                    <div class="absolute top-0 right-0 p-6 opacity-5">
+                        <i class="fa-solid fa-user-secret text-8xl text-slate-800"></i>
+                    </div>
+                    
+                    <h3 class="text-2xl font-black text-slate-800 mb-2 font-display">Activity 1: The Detective's Report</h3>
+                    <p class="text-slate-600 mb-6 font-medium text-sm">Click a highlighted word below, then click the empty box where it belongs.</p>
+                    
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-6 flex flex-wrap gap-2" id="vocab-word-bank">
+                        <button class="selectable-word bg-white text-slate-700 text-sm font-bold py-2 px-4 rounded-xl border border-slate-300 shadow-sm transition" data-word="look into">look into</button>
+                        <button class="selectable-word bg-white text-slate-700 text-sm font-bold py-2 px-4 rounded-xl border border-slate-300 shadow-sm transition" data-word="found out">found out</button>
+                        <button class="selectable-word bg-white text-slate-700 text-sm font-bold py-2 px-4 rounded-xl border border-slate-300 shadow-sm transition" data-word="came across">came across</button>
+                        <button class="selectable-word bg-white text-slate-700 text-sm font-bold py-2 px-4 rounded-xl border border-slate-300 shadow-sm transition" data-word="turned down">turned down</button>
+                        <button class="selectable-word bg-white text-slate-700 text-sm font-bold py-2 px-4 rounded-xl border border-slate-300 shadow-sm transition" data-word="turned out">turned out</button>
+                        <button class="selectable-word bg-white text-slate-700 text-sm font-bold py-2 px-4 rounded-xl border border-slate-300 shadow-sm transition" data-word="own up to">own up to</button>
+                    </div>
+
+                    <div class="text-base text-slate-800 leading-loose bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-inner relative z-10">
+                        <p class="mb-4">"Last week, I was asked to <span class="drop-zone inline-block min-w-[100px] h-[30px] border-b-2 border-dashed border-slate-400 bg-white cursor-pointer text-center font-black text-purple-700 align-middle px-2 rounded-t-lg transition hover:bg-slate-100 shadow-sm text-sm" data-answer="look into" onclick="handleDropZoneClick(this)"></span> a missing $10,000 at the bank. While searching the office, I <span class="drop-zone inline-block min-w-[100px] h-[30px] border-b-2 border-dashed border-slate-400 bg-white cursor-pointer text-center font-black text-purple-700 align-middle px-2 rounded-t-lg transition hover:bg-slate-100 shadow-sm text-sm" data-answer="came across" onclick="handleDropZoneClick(this)"></span> a secret letter. I tried to interview the assistant, but she <span class="drop-zone inline-block min-w-[100px] h-[30px] border-b-2 border-dashed border-slate-400 bg-white cursor-pointer text-center font-black text-purple-700 align-middle px-2 rounded-t-lg transition hover:bg-slate-100 shadow-sm text-sm" data-answer="turned down" onclick="handleDropZoneClick(this)"></span> my request.</p>
+                        <p>It <span class="drop-zone inline-block min-w-[100px] h-[30px] border-b-2 border-dashed border-slate-400 bg-white cursor-pointer text-center font-black text-purple-700 align-middle px-2 rounded-t-lg transition hover:bg-slate-100 shadow-sm text-sm" data-answer="turned out" onclick="handleDropZoneClick(this)"></span> that the manager made a huge mistake. When we <span class="drop-zone inline-block min-w-[100px] h-[30px] border-b-2 border-dashed border-slate-400 bg-white cursor-pointer text-center font-black text-purple-700 align-middle px-2 rounded-t-lg transition hover:bg-slate-100 shadow-sm text-sm" data-answer="found out" onclick="handleDropZoneClick(this)"></span> the truth, he finally had to <span class="drop-zone inline-block min-w-[100px] h-[30px] border-b-2 border-dashed border-slate-400 bg-white cursor-pointer text-center font-black text-purple-700 align-middle px-2 rounded-t-lg transition hover:bg-slate-100 shadow-sm text-sm" data-answer="own up to" onclick="handleDropZoneClick(this)"></span> what he did."</p>
+                    </div>
+                    
+                    <div class="mt-4 flex justify-end">
+                        <button onclick="checkVocabGame()" class="bg-slate-800 hover:bg-slate-700 text-white text-sm font-black py-2 px-6 rounded-xl shadow-lg transition flex items-center">Check Report</button>
+                    </div>
+                </div>
+
+                <!-- Activity 2: Match the Situation -->
+                <div class="bg-slate-900 rounded-3xl p-8 border border-slate-800 shadow-xl relative">
+                    <h3 class="text-2xl font-black text-white mb-2 font-display">Activity 2: The Situation Matcher</h3>
+                    <p class="text-slate-400 mb-6 text-sm">Match the situation on the left with the correct phrasal verb on the right. Select one from each column.</p>
+
+                    <div class="grid grid-cols-2 gap-4 md:gap-8" id="match-game-board">
+                        <div class="flex flex-col gap-3" id="match-col-1">
+                            <!-- JS injected situations -->
+                        </div>
+                        <div class="flex flex-col gap-3" id="match-col-2">
+                            <!-- JS injected verbs -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="sec-grammar" class="section-content">
+                <div class="mb-6">
+                    <span class="bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-emerald-200">Phase 3: The Mechanics</span>
+                    <h2 class="text-3xl font-black mt-4 mb-2 text-slate-900 font-display">Past Regrets & Criticism</h2>
+                    <p class="text-slate-600 text-lg">Use <strong>should have</strong> and <strong>shouldn't have</strong> to talk about things in the past that were a good idea, but didn't happen. It is used for both personal regret and criticizing others.</p>
+                </div>
+
+                <!-- Theory Expansion -->
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="theory-card bg-emerald-50 border-emerald-200 h-full">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-emerald-500 text-white rounded-lg flex items-center justify-center font-bold text-lg"><i class="fa-solid fa-face-frown-open"></i></div>
+                            <h3 class="text-xl font-black text-slate-800">1. Personal Regret</h3>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-4">You made a bad decision, and now you feel bad about it.</p>
+                        <div class="bg-white p-3 rounded-xl border border-emerald-100 shadow-sm text-sm">
+                            <p class="font-bold text-emerald-700 mb-1">Situation: I ate too much cake.</p>
+                            <p class="text-slate-700 italic">"I <strong>shouldn't have eaten</strong> so much. Now my stomach hurts."</p>
+                        </div>
+                    </div>
+
+                    <div class="theory-card bg-rose-50 border-rose-200 h-full">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 bg-rose-500 text-white rounded-lg flex items-center justify-center font-bold text-lg"><i class="fa-solid fa-hand-point-right"></i></div>
+                            <h3 class="text-xl font-black text-slate-800">2. Criticizing Others</h3>
+                        </div>
+                        <p class="text-slate-600 text-sm mb-4">Someone else made a mistake, and you are judging their past action.</p>
+                        <div class="bg-white p-3 rounded-xl border border-rose-100 shadow-sm text-sm">
+                            <p class="font-bold text-rose-700 mb-1">Situation: The government built a bad road.</p>
+                            <p class="text-slate-700 italic">"They <strong>should have planned</strong> it better. It was a waste of money."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Real Life Discussion Cases -->
+                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm mb-8">
+                    <h3 class="text-xl font-black text-slate-800 mb-4"><i class="fa-solid fa-users text-blue-500 mr-2"></i> Class Discussion: What should they have done?</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                            <p class="font-bold text-blue-700 mb-2">Case A: The Bitcoin Pizza</p>
+                            <p class="text-sm text-slate-600 mb-3">In 2010, Laszlo Hanyecz bought two pizzas for 10,000 Bitcoins. Today, that is worth hundreds of millions of dollars.</p>
+                            <p class="text-xs font-bold text-slate-400 uppercase">Discuss using shouldn't have...</p>
+                        </div>
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                            <p class="font-bold text-rose-700 mb-2">Case B: Blockbuster Video</p>
+                            <p class="text-sm text-slate-600 mb-3">In 2000, Blockbuster was offered the chance to buy Netflix for $50M. They laughed and said no. Blockbuster is now bankrupt.</p>
+                            <p class="text-xs font-bold text-slate-400 uppercase">Discuss using should have...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grammar Drills Container (JS will inject 15 MCQ here with pagination) -->
+                <div class="bg-slate-900 p-8 rounded-3xl border border-slate-800 shadow-xl mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-black text-white font-display"><i class="fa-solid fa-dumbbell text-emerald-400 mr-2"></i> Fix the Past Drills</h3>
+                        <span class="bg-emerald-500/20 text-emerald-400 text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full border border-emerald-500/30">Score: <span id="gram-score">0</span>/15</span>
+                    </div>
+                    
+                    <div class="text-white text-sm mb-4">Question <span id="drill-current">1</span> of 15</div>
+                    
+                    <div id="grammar-quiz-container" class="min-h-[250px]">
+                        <!-- Injected via JS -->
+                    </div>
+
+                    <div class="mt-4 flex justify-between hidden" id="drill-nav">
+                        <button onclick="prevDrill()" class="text-slate-400 hover:text-white font-bold transition"><i class="fa-solid fa-arrow-left"></i> Previous</button>
+                        <button onclick="nextDrill()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-6 rounded-lg transition shadow">Next <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Writing AI Situation Generator -->
+                <div class="mb-8 bg-white border-2 border-dashed border-purple-300 p-8 rounded-3xl relative">
+                    <h3 class="text-xl font-black text-slate-800 mb-2"><i class="fa-solid fa-robot text-purple-600 mr-2"></i> AI Regret Simulator</h3>
+                    <p class="text-slate-600 mb-6 text-sm font-medium">Generate a random bad situation. Write a sentence expressing regret or criticism using <strong>should have / shouldn't have</strong>. The AI will evaluate your grammar instantly.</p>
+                    
+                    <div class="bg-purple-50 p-4 rounded-xl border border-purple-100 mb-4 flex items-center justify-between">
+                        <p id="ai-sit-text" class="text-purple-900 font-medium italic">"Click the button to generate a situation."</p>
+                        <button onclick="generateAISituation()" class="bg-purple-600 text-white text-xs font-bold py-2 px-4 rounded-lg hover:bg-purple-700 transition flex-shrink-0 ml-4"><i class="fa-solid fa-shuffle"></i> Generate</button>
+                    </div>
+
+                    <textarea id="ai-grammar-input" class="w-full p-4 rounded-xl border border-slate-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none resize-none font-medium text-slate-700 bg-white shadow-inner" rows="3" placeholder="Type your sentence here..."></textarea>
+                    
+                    <div class="mt-4">
+                        <button onclick="simulateAI('grammar')" class="bg-slate-800 hover:bg-slate-700 text-white font-black py-3 px-6 rounded-xl transition shadow flex items-center">
+                            <span id="ai-btn-text-grammar">Submit for Evaluation</span> <i class="fa-solid fa-paper-plane ml-2"></i>
+                        </button>
+                    </div>
+                    <div id="ai-response-grammar" class="hidden mt-4 p-5 bg-slate-100 rounded-xl text-sm text-slate-800 border border-slate-300 font-medium"></div>
+                </div>
+            </section>
+
+            <section id="sec-reading" class="section-content">
+                <div class="mb-6">
+                    <span class="bg-rose-100 text-rose-800 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-rose-200">Phase 4: Comprehension</span>
+                    <h2 class="text-3xl font-black mt-4 mb-2 text-slate-900 font-display">Famous Blunders (Pair Work)</h2>
+                    <p class="text-slate-600 text-lg">Work with a partner. Read the cases, answer the comprehension questions, and then research your own famous mistake.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <!-- Story 1 -->
+                    <div class="theory-card relative overflow-hidden group">
+                        <div class="absolute -right-4 -top-4 opacity-5 transition-transform group-hover:scale-110"><i class="fa-solid fa-candy-cane text-9xl"></i></div>
+                        <h3 class="text-xl font-black text-slate-800 mb-3 relative z-10"><span class="text-rose-500 mr-2">1.</span> The Candy Blunder (1982)</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4 relative z-10">In the movie <em>E.T.</em>, filmmakers wanted to use M&M's. Mars Inc. <span class="font-bold text-rose-600">turned down</span> the request. Hershey allowed them to use Reese's Pieces instead. After the movie, Reese's sales <span class="font-bold text-rose-600">went up</span> 65%. It <span class="font-bold text-rose-600">turned out</span> to be the best marketing ever.</p>
+                    </div>
+                    <!-- Story 2 -->
+                    <div class="theory-card relative overflow-hidden group">
+                        <div class="absolute -right-4 -top-4 opacity-5 transition-transform group-hover:scale-110"><i class="fa-solid fa-rocket text-9xl"></i></div>
+                        <h3 class="text-xl font-black text-slate-800 mb-3 relative z-10"><span class="text-indigo-500 mr-2">2.</span> Lost In Space (1999)</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4 relative z-10">The Mars Orbiter disappeared. When scientists <span class="font-bold text-indigo-600">looked into</span> it, they <span class="font-bold text-indigo-600">found out</span> a terrible mistake: one team used meters, another used yards. The spacecraft went too close to Mars and <span class="font-bold text-indigo-600">burned up</span>.</p>
+                    </div>
+                </div>
+
+                <!-- Comprehension Check -->
+                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm mb-10">
+                    <h3 class="font-bold text-slate-800 mb-4 border-b pb-2">Comprehension Check</h3>
+                    <div class="space-y-4 text-sm font-medium text-slate-700">
+                        <div class="flex justify-between items-center">
+                            <p>1. Which candy company <em>missed out</em> on the opportunity?</p>
+                            <button onclick="toggleAnswer('ans-1')" class="text-xs bg-slate-200 px-3 py-1 rounded hover:bg-slate-300">Show Answer</button>
+                        </div>
+                        <p id="ans-1" class="hidden text-rose-600 text-xs font-bold">Answer: Mars Inc.</p>
+                        
+                        <div class="flex justify-between items-center">
+                            <p>2. Why did the Mars Orbiter <em>burn up</em>?</p>
+                            <button onclick="toggleAnswer('ans-2')" class="text-xs bg-slate-200 px-3 py-1 rounded hover:bg-slate-300">Show Answer</button>
+                        </div>
+                        <p id="ans-2" class="hidden text-rose-600 text-xs font-bold">Answer: Because of a measurement system mistake (meters vs yards).</p>
+                    </div>
+                </div>
+
+                <!-- Research Task -->
+                <div class="bg-slate-900 text-white rounded-3xl p-8 shadow-xl relative overflow-hidden border border-slate-800 mb-8">
+                    <h3 class="text-teal-400 font-black mb-2 flex items-center uppercase tracking-widest text-sm"><i class="fa-solid fa-laptop-code mr-2"></i> Pair Task: Case Study Builder</h3>
+                    <p class="text-slate-300 mb-6 font-medium text-sm">Use the internet to find <strong>one</strong> other famous historical or business mistake. Discuss it with your partner, then organize your findings in the steps below. The AI will compile your notes and evaluate your grammar.</p>
+                    
+                    <div class="space-y-5 mb-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Step 1: The Culprit</label>
+                            <input type="text" id="research-who" placeholder="Who made the mistake? (e.g., Blockbuster, Kodak, Napoleon)" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white focus:border-teal-500 outline-none text-sm transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Step 2: The Events</label>
+                            <textarea id="research-what" placeholder="What happened? Try to use a phrasal verb (e.g., they turned down the offer, they missed out on...)." class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white focus:border-teal-500 outline-none text-sm h-20 resize-none transition"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Step 3: The Regret</label>
+                            <textarea id="research-regret" placeholder="Criticize their decision. Use 'should have' or 'shouldn't have' (e.g., They should have bought the company)." class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white focus:border-teal-500 outline-none text-sm h-20 resize-none transition"></textarea>
+                        </div>
+                    </div>
+
+                    <button onclick="evaluateResearch()" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-black py-3 px-6 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                        <span id="research-btn-text">Compile & Evaluate</span> <i class="fa-solid fa-robot"></i>
+                    </button>
+
+                    <!-- AI Evaluation Result -->
+                    <div id="research-result-area" class="hidden mt-8 border-t border-slate-700 pt-6">
+                        <h4 class="text-teal-400 font-bold text-sm mb-2 uppercase tracking-widest"><i class="fa-solid fa-file-lines mr-1"></i> Compiled Report:</h4>
+                        <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 mb-6 shadow-inner">
+                            <p id="research-compiled-text" class="text-slate-200 text-sm leading-relaxed font-serif"></p>
+                        </div>
+                        
+                        <h4 class="text-purple-400 font-bold text-sm mb-2 uppercase tracking-widest"><i class="fa-solid fa-bolt mr-1"></i> AI Feedback:</h4>
+                        <div id="research-ai-feedback" class="bg-purple-900/40 border border-purple-500/50 p-5 rounded-xl text-sm text-slate-200 leading-relaxed shadow-inner">
+                            <!-- Feedback injected via JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="sec-speaking" class="section-content">
+                <div class="mb-6">
+                    <span class="bg-teal-100 text-teal-800 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-teal-200">Phase 5: Output</span>
+                    <h2 class="text-3xl font-black mt-4 mb-2 text-slate-900 font-display">AI Conversational Chat</h2>
+                    <p class="text-slate-600 text-lg">It's time to speak dynamically. Use LanguaTalk (or ChatGPT Voice) to have a real-time conversation about mistakes. The AI will lead the conversation and correct your grammar.</p>
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm flex flex-col md:flex-row gap-8 items-center mb-8">
+                    <div class="w-32 h-32 flex-shrink-0 bg-teal-50 text-teal-500 rounded-full flex items-center justify-center text-6xl shadow-inner border-4 border-teal-100">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black text-slate-800 mb-3">The "Regret" Interview</h3>
+                        <p class="text-slate-600 mb-4 text-sm">Copy the prompt below into your voice AI app. Have a 5-minute conversation. Try to naturally use words like <em>turn out, figure out, mess up</em>, and <em>should have</em>.</p>
+                        <a href="https://languatalk.com/users/sign_in" target="_blank" class="text-teal-600 font-bold text-sm hover:underline"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open LanguaTalk AI</a>
+                    </div>
+                </div>
+
+                <div class="prompt-box">
+                    <button class="copy-btn" onclick="copyPrompt('ai-speaking', this)"><i class="fa-solid fa-copy"></i> Copy Prompt</button>
+                    <div class="prompt-text" id="ai-speaking">Act as my English conversation partner (Level B1+). We are practicing the topic of "Regrets and Past Mistakes".
+
+Please start by asking me about a time I made a funny, minor, or serious mistake. 
+RULES:
+1. Ask me ONLY ONE question at a time.
+2. Wait for my answer. 
+3. Naturally keep the conversation going based on what I say.
+4. Correct my grammar ONLY if I make a mistake using "should have", "shouldn't have", or phrasal verbs. Do not correct minor errors.
+
+Whenever you are ready, ask me your first question.</div>
+                </div>
+            </section>
+
+            <section id="sec-final" class="section-content">
+                <div class="mb-6 flex justify-between items-end">
+                    <div>
+                        <span class="bg-indigo-100 text-indigo-800 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-indigo-200">Phase 6: Conclusion</span>
+                        <h2 class="text-3xl font-black mt-4 mb-1 text-slate-900 font-display">The Final Arena</h2>
+                        <p class="text-slate-600">Let's see what you remember! Answer these rapid-fire questions to review today's grammar and 15 phrasal verbs.</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-3xl p-8 md:p-10 border border-slate-800 text-center shadow-2xl relative overflow-hidden mb-10">
+                    <div class="absolute -left-10 -top-10 opacity-10"><i class="fa-solid fa-clock-rotate-left text-9xl text-white"></i></div>
+                    
+                    <div class="relative z-10 w-full max-w-lg mx-auto" id="wrapup-area">
+                        <i class="fa-solid fa-rocket text-6xl text-indigo-400 mb-6 animate-pulse"></i>
+                        <h3 class="text-2xl font-black text-white mb-6 font-display" id="wu-final-question">Ready for the challenge? Earn 100 XP!</h3>
+                        
+                        <div id="wu-final-options" class="flex flex-col gap-3">
+                            <button onclick="startWrapUp()" class="bg-indigo-600 hover:bg-indigo-500 text-white py-4 px-12 rounded-2xl font-black text-xl transition shadow-xl transform hover:scale-105 inline-block w-full">
+                                Start Quiz <i class="fa-solid fa-play ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        // ===================== GLOBAL STATE & NAV =====================
+        let totalXP = 0;
+        const navItems = document.querySelectorAll('.nav-item');
+        const sections = document.querySelectorAll('.section-content');
+
+        navItems.forEach(item => { item.addEventListener('click', () => { navigateTo(item.getAttribute('data-target')); }); });
+
+        function navigateTo(targetId) {
+            navItems.forEach(nav => {
+                nav.classList.remove('active', 'bg-purple-50', 'border-purple-200');
+                if (nav.getAttribute('data-target') === targetId) nav.classList.add('active');
+            });
+            sections.forEach(sec => {
+                sec.classList.remove('active');
+                if (sec.id === targetId) sec.classList.add('active');
+            });
+            document.getElementById('content-container').parentElement.scrollTo(0,0);
+        }
+
+        function addXP(amount) {
+            totalXP += amount;
+            document.getElementById('xp-counter').innerText = totalXP;
+            document.getElementById('xp-counter-mobile').innerText = totalXP;
+            
+            const pop = document.createElement('div');
+            pop.innerText = `+${amount} XP`;
+            pop.style.position = 'fixed'; pop.style.color = '#a855f7'; pop.style.fontWeight = '900'; pop.style.fontSize = '2rem'; pop.style.zIndex = '9999'; pop.style.pointerEvents = 'none';
+            pop.style.left = '50%'; pop.style.top = '50%'; pop.style.transform = 'translate(-50%, -50%)';
+            pop.style.animation = 'floatUp 1s forwards';
+            document.body.appendChild(pop);
+            setTimeout(() => pop.remove(), 1000);
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toast-icon');
+            const msg = document.getElementById('toast-msg');
+            
+            msg.innerText = message;
+            toast.className = `fixed bottom-5 right-5 text-white px-6 py-3 rounded-xl shadow-2xl font-bold transition-all duration-300 z-50 flex items-center gap-2 transform translate-y-0 opacity-100`;
+            
+            if(type === 'success') {
+                toast.classList.add('bg-emerald-600');
+                icon.className = 'fa-solid fa-check-circle';
+            } else if(type === 'error') {
+                toast.classList.add('bg-rose-600');
+                icon.className = 'fa-solid fa-circle-xmark';
+            } else {
+                toast.classList.add('bg-purple-600');
+                icon.className = 'fa-solid fa-info-circle';
+            }
+            
+            setTimeout(() => { toast.classList.replace('translate-y-0', 'translate-y-20'); toast.classList.replace('opacity-100', 'opacity-0'); }, 3000);
+        }
+
+        // ===================== WARMUP SPINNER =====================
+        const wuQuestions = [
+            "If you could un-send one text message, what would it be?",
+            "What is a common mistake teenagers make that they regret in their 20s?",
+            "Do you think the phrase 'hindsight is 20/20' is always true?",
+            "Have you ever bought something expensive and immediately regretted it?",
+            "What is a missed opportunity you still think about today?",
+            "Is it better to have regrets or to never take risks? Why?"
+        ];
+
+        function spinDiscussion() {
+            const textEl = document.getElementById('spin-text');
+            const overlay = document.getElementById('spin-overlay');
+            overlay.classList.remove('hidden');
+            
+            setTimeout(() => {
+                const randomQ = wuQuestions[Math.floor(Math.random() * wuQuestions.length)];
+                textEl.innerText = `"${randomQ}"`;
+                textEl.classList.remove('italic', 'text-slate-300');
+                textEl.classList.add('text-white', 'font-bold');
+                overlay.classList.add('hidden');
+                addXP(5);
+            }, 1000);
+        }
+
+        // ===================== VOCABULARY GENERATION =====================
+        const vocabList = [
+            {v: "look into", d: "investigate"}, {v: "turn out", d: "have a final result"},
+            {v: "find out", d: "discover info"}, {v: "come across", d: "find by chance"},
+            {v: "turn down", d: "reject an offer"}, {v: "throw away", d: "put in trash"},
+            {v: "burn up", d: "destroy by fire"}, {v: "go up", d: "increase"},
+            {v: "miss out", d: "lose an opportunity"}, {v: "mess up", d: "make a mistake"},
+            {v: "screw up", d: "make a big mistake (informal)"}, {v: "slip up", d: "make a small error"},
+            {v: "own up to", d: "admit a mistake"}, {v: "think back on", d: "remember the past"},
+            {v: "figure out", d: "solve or understand"}
+        ];
+
+        function renderVocabGrid() {
+            const grid = document.getElementById('vocab-grid');
+            let html = '';
+            vocabList.forEach(item => {
+                html += `<div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-center cursor-help group transition hover:bg-blue-50 hover:border-blue-200">
+                            <p class="font-black text-slate-800 text-sm group-hover:text-blue-700">${item.v}</p>
+                            <p class="text-[10px] text-slate-500 uppercase font-bold mt-1 opacity-0 group-hover:opacity-100 transition">${item.d}</p>
+                         </div>`;
+            });
+            grid.innerHTML = html;
+        }
+
+        // ===================== VOCAB ACTIVITY 1: DROP =====================
+        let selectedVocabWord = null;
+        let selectedVocabButton = null;
+
+        document.querySelectorAll('.selectable-word').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (selectedVocabButton) selectedVocabButton.classList.remove('selected', 'bg-purple-600', 'text-white', 'border-purple-600');
+                this.classList.add('selected', 'bg-purple-600', 'text-white', 'border-purple-600');
+                this.classList.remove('bg-white', 'text-slate-700');
+                selectedVocabWord = this.getAttribute('data-word');
+                selectedVocabButton = this;
+                document.querySelectorAll('.drop-zone:empty').forEach(zone => { zone.classList.add('active-target'); });
+            });
+        });
+
+        function handleDropZoneClick(element) {
+            if (!selectedVocabWord) { showToast("Select a word from the Word Bank first!", "info"); return; }
+            if (element.innerText) {
+                const oldWord = element.innerText;
+                const oldBtn = document.querySelector(`.selectable-word[data-word="${oldWord}"]`);
+                if(oldBtn) {
+                    oldBtn.classList.remove('hidden');
+                    oldBtn.classList.add('bg-white', 'text-slate-700');
+                }
+            }
+            element.innerText = selectedVocabWord;
+            selectedVocabButton.classList.add('hidden');
+            selectedVocabButton.classList.remove('selected', 'bg-purple-600', 'text-white', 'border-purple-600');
+            selectedVocabWord = null;
+            selectedVocabButton = null;
+            document.querySelectorAll('.drop-zone').forEach(zone => zone.classList.remove('active-target'));
+        }
+
+        function checkVocabGame() {
+            const zones = document.querySelectorAll('.drop-zone');
+            let allCorrect = true;
+            let filledCount = 0;
+
+            zones.forEach(zone => {
+                const answer = zone.getAttribute('data-answer');
+                if (zone.innerText) filledCount++;
+
+                if (zone.innerText === answer) {
+                    zone.className = "drop-zone inline-block min-w-[100px] h-[30px] border-b-2 border-emerald-500 bg-emerald-50 cursor-pointer text-center font-black text-emerald-700 align-middle px-2 rounded-t-lg shadow-sm text-sm";
+                } else {
+                    allCorrect = false;
+                    if (zone.innerText) {
+                        zone.className = "drop-zone inline-block min-w-[100px] h-[30px] border-b-2 border-rose-500 bg-rose-50 cursor-pointer text-center font-black text-rose-700 align-middle px-2 rounded-t-lg shadow-sm text-sm";
+                    }
+                }
+            });
+
+            if (filledCount < zones.length) showToast("Fill in all blanks first.", "info");
+            else if (allCorrect) { showToast("Excellent detective work!", "success"); addXP(30); }
+            else showToast("Some words are wrong. Try again!", "error");
+        }
+
+        // ===================== VOCAB ACTIVITY 2: MATCHING =====================
+        const matchData = [
+            { id: 1, text: "I made a huge mistake at work.", type: 'sit' }, { id: 1, text: "messed up", type: 'verb' },
+            { id: 2, text: "I rejected a great job offer.", type: 'sit' }, { id: 2, text: "turned down", type: 'verb' },
+            { id: 3, text: "I finally admitted I broke the vase.", type: 'sit' }, { id: 3, text: "owned up to", type: 'verb' },
+            { id: 4, text: "I lost the chance to buy cheap tickets.", type: 'sit' }, { id: 4, text: "missed out", type: 'verb' }
+        ];
+
+        let selectedMatchSit = null;
+        let selectedMatchVerb = null;
+
+        function renderMatchGame() {
+            const sits = matchData.filter(d => d.type === 'sit').sort(() => Math.random() - 0.5);
+            const verbs = matchData.filter(d => d.type === 'verb').sort(() => Math.random() - 0.5);
+            
+            document.getElementById('match-col-1').innerHTML = sits.map(s => `<div class="match-card bg-slate-800 text-slate-200 p-3 rounded-xl text-sm font-medium" data-id="${s.id}" data-type="sit" onclick="handleMatchClick(this)">${s.text}</div>`).join('');
+            document.getElementById('match-col-2').innerHTML = verbs.map(v => `<div class="match-card bg-slate-800 text-purple-300 p-3 rounded-xl text-sm font-bold text-center" data-id="${v.id}" data-type="verb" onclick="handleMatchClick(this)">${v.text}</div>`).join('');
+        }
+
+        function handleMatchClick(element) {
+            if(element.classList.contains('matched')) return;
+            
+            const type = element.getAttribute('data-type');
+            
+            if(type === 'sit') {
+                if(selectedMatchSit) selectedMatchSit.classList.remove('selected');
+                selectedMatchSit = element;
+            } else {
+                if(selectedMatchVerb) selectedMatchVerb.classList.remove('selected');
+                selectedMatchVerb = element;
+            }
+            element.classList.add('selected');
+
+            if(selectedMatchSit && selectedMatchVerb) {
+                if(selectedMatchSit.getAttribute('data-id') === selectedMatchVerb.getAttribute('data-id')) {
+                    selectedMatchSit.className = 'match-card matched';
+                    selectedMatchVerb.className = 'match-card matched';
+                    showToast("Match!", "success");
+                    addXP(10);
+                } else {
+                    selectedMatchSit.classList.remove('selected'); selectedMatchSit.classList.add('error');
+                    selectedMatchVerb.classList.remove('selected'); selectedMatchVerb.classList.add('error');
+                    setTimeout(() => {
+                        if(selectedMatchSit) selectedMatchSit.classList.remove('error');
+                        if(selectedMatchVerb) selectedMatchVerb.classList.remove('error');
+                        selectedMatchSit = null; selectedMatchVerb = null;
+                    }, 400);
+                    return; // exit to clear selection naturally
+                }
+                selectedMatchSit = null; selectedMatchVerb = null;
+            }
+        }
+
+        // ===================== GRAMMAR HUB: 15 DRILLS =====================
+        const grammarExercises = [
+            { q: "I got completely wet in the rain. I _______ brought an umbrella.", opts: ["should have", "shouldn't have", "should"], correct: 0, fb: "'should have + V3' expresses a good idea that didn't happen." },
+            { q: "My stomach hurts. I _______ eaten that whole pizza.", opts: ["should have", "shouldn't have", "shouldn't"], correct: 1, fb: "'shouldn't have' expresses regret about an action you DID do." },
+            { q: "Which is grammatically CORRECT?", opts: ["She should have went.", "She should has gone.", "She should have gone."], correct: 2, fb: "Always use 'have' and the Past Participle (gone)." },
+            { q: "He didn't study and failed. What is the best criticism?", opts: ["He should study more.", "He shouldn't have failed.", "He should have studied more."], correct: 2, fb: "Criticizing a past lack of action requires 'should have studied'." },
+            { q: "I _______ that job offer when I had the chance.", opts: ["should have turn down", "shouldn't have turned down", "shouldn't have turn down"], correct: 1, fb: "Use Past Participle 'turned'." },
+            { q: "They got lost in the city. They _______ a map.", opts: ["should have bring", "should have brought", "shouldn't have brought"], correct: 1, fb: "Irregular V3: brought." },
+            { q: "I feel terrible today. I _______ stayed up until 3 AM.", opts: ["should have", "shouldn't have", "shouldn't had"], correct: 1, fb: "Regret about doing something bad: shouldn't have." },
+            { q: "The company bankrupt. They _______ invested in better technology.", opts: ["should have", "shouldn't have", "must have"], correct: 0, fb: "It was a good idea in the past." },
+            { q: "Which shows regret?", opts: ["I should leave now.", "I must leave now.", "I should have left earlier."], correct: 2, fb: "Only 'should have' refers to the past." },
+            { q: "You ________ to him like that. It was very rude.", opts: ["should have spoken", "shouldn't have spoken", "shouldn't have spoke"], correct: 1, fb: "V3 of speak is spoken. It was a bad action, so 'shouldn't'." },
+            { q: "We missed the flight. We _______ home earlier.", opts: ["should have left", "should have leaved", "shouldn't have left"], correct: 0, fb: "V3 of leave is left." },
+            { q: "I bought this expensive jacket and I never wear it. I _______ it.", opts: ["should have bought", "shouldn't have bought", "shouldn't have buy"], correct: 1, fb: "Regret buying it = shouldn't have bought." },
+            { q: "The secret is out. He _______ everyone.", opts: ["should have told", "shouldn't have told", "should tell"], correct: 1, fb: "It was a bad idea to tell everyone." },
+            { q: "I _______ the instructions before building the furniture.", opts: ["should have read", "should have reading", "should read"], correct: 0, fb: "Past participle of read is read (pronounced red)." },
+            { q: "She _______ when she made the mistake, instead of hiding it.", opts: ["should have owned up", "shouldn't have owned up", "should own up"], correct: 0, fb: "Admitting a mistake is a good idea: should have owned up." }
+        ];
+
+        let drillIndex = 0;
+        let gramScore = 0;
+
+        function renderDrill() {
+            const container = document.getElementById('grammar-quiz-container');
+            const ex = grammarExercises[drillIndex];
+            document.getElementById('drill-current').innerText = drillIndex + 1;
+            document.getElementById('drill-nav').classList.remove('hidden');
+
+            let html = `<div class="animate-[fadeIn_0.3s]">
+                            <h4 class="text-lg font-bold text-white mb-4">${drillIndex + 1}. ${ex.q}</h4>
+                            <div class="flex flex-col gap-3" id="gram-opts-${drillIndex}">
+                                ${ex.opts.map((opt, oi) => `<div class="mcq-opt !bg-slate-800 !text-slate-200 !border-slate-700 hover:!border-emerald-400" onclick="checkGrammar(${drillIndex}, ${oi})">${opt}</div>`).join('')}
+                            </div>
+                            <div id="gram-fb-${drillIndex}" class="fb-box"></div>
+                        </div>`;
+            container.innerHTML = html;
+        }
+
+        function checkGrammar(exIdx, optIdx) {
+            const ex = grammarExercises[exIdx];
+            const optsContainer = document.getElementById(`gram-opts-${exIdx}`);
+            const fbBox = document.getElementById(`gram-fb-${exIdx}`);
+            
+            if(optsContainer.getAttribute('data-answered') === 'true') return;
+            optsContainer.setAttribute('data-answered', 'true');
+
+            Array.from(optsContainer.children).forEach((child, i) => {
+                child.className = 'mcq-opt pointer-events-none !text-white';
+                if (i === ex.correct) {
+                    child.classList.add('!bg-emerald-600', '!border-emerald-500');
+                } else if (i === optIdx) {
+                    child.classList.add('!bg-rose-600', '!border-rose-500');
+                } else {
+                    child.classList.add('!bg-slate-800', '!border-slate-700', 'opacity-50');
+                }
+            });
+
+            if (optIdx === ex.correct) {
+                fbBox.className = 'fb-box !bg-emerald-900/30 !border-l-[4px] !border-emerald-500 !text-emerald-400 block animate-[fadeIn_0.3s]';
+                fbBox.innerHTML = `<i class="fa-solid fa-check"></i> Correct! ${ex.fb}`;
+                gramScore++;
+                document.getElementById('gram-score').innerText = gramScore;
+                addXP(5);
+            } else {
+                fbBox.className = 'fb-box !bg-rose-900/30 !border-l-[4px] !border-rose-500 !text-rose-400 block animate-[fadeIn_0.3s]';
+                fbBox.innerHTML = `<i class="fa-solid fa-xmark"></i> Not quite. ${ex.fb}`;
+            }
+        }
+
+        function nextDrill() {
+            if (drillIndex < grammarExercises.length - 1) { drillIndex++; renderDrill(); }
+            else { showToast("You finished all grammar drills!", "success"); }
+        }
+        function prevDrill() {
+            if (drillIndex > 0) { drillIndex--; renderDrill(); }
+        }
+
+        // ===================== AI SITUATION GENERATOR =====================
+        const aiSituations = [
+            "You stayed up until 4 AM watching Netflix and missed your morning exam.",
+            "You bought a cheap phone charger and it broke the next day.",
+            "You ignored a weird noise in your car, and now the engine is broken.",
+            "You didn't save your document and your computer crashed.",
+            "You cooked a fancy dinner but forgot to add salt.",
+            "You left your umbrella at home and it rained heavily.",
+            "You told a secret to someone who talks too much.",
+            "You didn't study for the interview and looked foolish.",
+            "You ate street food that looked suspicious and got sick.",
+            "You waited until the last minute to buy flight tickets and prices doubled."
+        ];
+
+        function generateAISituation() {
+            const textEl = document.getElementById('ai-sit-text');
+            const randomSit = aiSituations[Math.floor(Math.random() * aiSituations.length)];
+            textEl.innerText = randomSit;
+            textEl.classList.remove('italic', 'text-purple-900');
+            textEl.classList.add('font-bold', 'text-slate-800');
+            document.getElementById('ai-grammar-input').value = "";
+            document.getElementById('ai-response-grammar').classList.add('hidden');
+        }
+
+        function simulateAI(section) {
+            const input = document.getElementById(`ai-${section}-input`).value.trim();
+            const btnText = document.getElementById(`ai-btn-text-${section}`);
+            const responseBox = document.getElementById(`ai-response-${section}`);
+
+            if (input.length < 10) { showToast("Please write a complete sentence first.", "info"); return; }
+            if (document.getElementById('ai-sit-text').innerText.includes("Click the button")) { showToast("Generate a situation first!", "error"); return; }
+
+            const originalText = btnText.innerText;
+            btnText.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Analyzing...';
+            responseBox.classList.add('hidden');
+            
+            setTimeout(() => {
+                btnText.innerText = originalText;
+                responseBox.classList.remove('hidden');
+                
+                const lower = input.toLowerCase();
+                const hasShould = lower.includes("should");
+                const hasHave = lower.includes("have");
+                const hasV3Error = lower.includes("should have went") || lower.includes("should have did") || lower.includes("should of");
+
+                if (hasV3Error) {
+                    responseBox.innerHTML = `<p class="text-rose-600 mb-2 font-black"><i class="fa-solid fa-triangle-exclamation"></i> AI Feedback: Grammar Error</p><p>Remember to use 'have' + Past Participle (V3). Never use simple past or 'of' after should.</p>`;
+                } else if (hasShould && hasHave) {
+                    responseBox.innerHTML = `<p class="text-emerald-600 mb-2 font-black"><i class="fa-solid fa-check-circle"></i> AI Feedback: Excellent</p><p>You successfully used the target structure correctly for this situation!</p>`;
+                    addXP(20);
+                } else {
+                    responseBox.innerHTML = `<p class="text-amber-600 mb-2 font-black"><i class="fa-solid fa-circle-info"></i> AI Feedback: Missing Structure</p><p>Make sure you explicitly use "should have" or "shouldn't have" in your response to express the regret.</p>`;
+                }
+            }, 1200);
+        }
+
+        function toggleAnswer(id) {
+            const el = document.getElementById(id);
+            if(el.classList.contains('hidden')) { el.classList.remove('hidden'); addXP(5); }
+            else el.classList.add('hidden');
+        }
+
+        // ===================== PAIR TASK: RESEARCH EVALUATION =====================
+        function evaluateResearch() {
+            const who = document.getElementById('research-who').value.trim();
+            const what = document.getElementById('research-what').value.trim();
+            const regret = document.getElementById('research-regret').value.trim();
+            const btnText = document.getElementById('research-btn-text');
+            const resultArea = document.getElementById('research-result-area');
+            const compiledEl = document.getElementById('research-compiled-text');
+            const feedbackEl = document.getElementById('research-ai-feedback');
+
+            if (!who || !what || !regret) { 
+                showToast("Please fill out all 3 steps to compile the report.", "error"); 
+                return; 
+            }
+
+            const originalText = btnText.innerText;
+            btnText.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Analyzing...';
+            resultArea.classList.add('hidden');
+
+            setTimeout(() => {
+                btnText.innerText = originalText;
+                
+                // Compile the text into a cohesive paragraph
+                const compiledText = `One of the most famous mistakes in history was made by ${who}. ${what} Looking back at this situation, it's clear they made the wrong choice. ${regret}`;
+                compiledEl.innerText = compiledText;
+
+                // Simple simulated AI Evaluation based on target language
+                const lowerRegret = regret.toLowerCase();
+                const lowerWhat = what.toLowerCase();
+                const hasGrammar = lowerRegret.includes("should have") || lowerRegret.includes("shouldn't have") || lowerRegret.includes("should not have");
+                
+                // Check for 15 target phrasal verbs from Phase 2
+                const targetVerbs = ["look into", "turn out", "find out", "come across", "turn down", "throw away", "burn up", "go up", "miss out", "mess up", "screw up", "slip up", "own up", "think back", "figure out"];
+                const hasVocab = targetVerbs.some(v => lowerWhat.includes(v) || lowerRegret.includes(v));
+
+                let feedbackHTML = "";
+                if (hasGrammar && hasVocab) {
+                    feedbackHTML = `<p class="text-emerald-400 font-bold mb-1 text-base"><i class="fa-solid fa-star"></i> Outstanding Report!</p>
+                                    <p>You successfully integrated the target grammar (<strong class="text-white">should have</strong>) and class vocabulary into a cohesive historical summary. Excellent analytical and writing skills!</p>`;
+                    addXP(40);
+                } else if (hasGrammar && !hasVocab) {
+                    feedbackHTML = `<p class="text-amber-400 font-bold mb-1 text-base"><i class="fa-solid fa-check"></i> Good Grammar Structure</p>
+                                    <p>Your criticism using "should have/shouldn't have" is well placed. To improve, try incorporating more descriptive phrasal verbs from Phase 2 (e.g., <em>missed out, turned down, messed up</em>) into the 'Events' section.</p>`;
+                    addXP(20);
+                } else if (!hasGrammar && hasVocab) {
+                    feedbackHTML = `<p class="text-amber-400 font-bold mb-1 text-base"><i class="fa-solid fa-check"></i> Great Vocabulary Usage</p>
+                                    <p>Nice use of phrasal verbs! However, your 'Regret' section is missing the target grammar. Make sure to explicitly use <strong class="text-white">"should have + V3"</strong> to clearly express criticism of their past actions.</p>`;
+                    addXP(20);
+                } else {
+                    feedbackHTML = `<p class="text-rose-400 font-bold mb-1 text-base"><i class="fa-solid fa-triangle-exclamation"></i> Missing Target Language</p>
+                                    <p>Your summary explains the event well, but it's missing our class objectives! Please edit your responses above to include at least one phrasal verb and a clear "should have / shouldn't have" statement.</p>`;
+                }
+
+                feedbackEl.innerHTML = feedbackHTML;
+                resultArea.classList.remove('hidden');
+                resultArea.classList.add('animate-[fadeIn_0.5s]');
+                
+                // Scroll down slightly so the user sees the result
+                resultArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 1500);
+        }
+
+        // ===================== PROMPT COPY =====================
+        function copyPrompt(elementId, btnElement) {
+            const textToCopy = document.getElementById(elementId).innerText;
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = textToCopy;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            
+            try {
+                document.execCommand('copy');
+                const originalHTML = btnElement.innerHTML;
+                btnElement.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
+                btnElement.classList.add('copied');
+                showToast("Prompt Copied!", "success");
+                
+                setTimeout(() => {
+                    btnElement.innerHTML = originalHTML;
+                    btnElement.classList.remove('copied');
+                }, 3000);
+            } catch (err) { console.error('Oops, unable to copy', err); }
+            document.body.removeChild(tempTextArea);
+        }
+
+        // ===================== WRAP UP ARENA =====================
+        const wrapUpQuestions = [
+            { type: "Vocab", q: "If you reject a job offer, you _______ it _______.", opts: ["turn / down", "throw / away", "find / out"], ans: 0 },
+            { type: "Grammar", q: "Find the error: 'I shouldn't have stay up so late.'", opts: ["Change 'am' to 'was'", "Change 'shouldn't' to 'should'", "Change 'stay' to 'stayed'"], ans: 2 },
+            { type: "Vocab", q: "Which word means 'to make a mistake'?", opts: ["Look into", "Mess up", "Turn out"], ans: 1 },
+            { type: "Grammar", q: "They _______ the bridge better. It collapsed.", opts: ["should build", "should have built", "shouldn't have built"], ans: 1 },
+            { type: "Story", q: "Why did the Mars Orbiter burn up?", opts: ["It hit an asteroid", "A metric/imperial math mistake", "Used cheap materials"], ans: 1 }
+        ];
+
+        let finalQ = 0;
+
+        function startWrapUp() { finalQ = 0; renderWrapUpQuestion(); }
+
+        function renderWrapUpQuestion() {
+            if (finalQ >= wrapUpQuestions.length) {
+                document.getElementById('wrapup-area').innerHTML = `
+                    <div class="animate-[fadeIn_0.5s]">
+                        <i class="fa-solid fa-trophy text-8xl text-yellow-500 mb-6 drop-shadow-lg"></i>
+                        <h3 class="text-4xl font-black text-white mb-4 font-display">Class Complete!</h3>
+                        <p class="text-slate-300 text-lg mb-8">You survived history's worst mistakes and mastered past regrets.</p>
+                        <button onclick="finishClass()" class="btn-primary font-black text-xl py-4 px-12 rounded-full shadow-lg transform transition hover:scale-105">
+                            Claim Reward <i class="fa-solid fa-award ml-2"></i>
+                        </button>
+                    </div>`;
+                addXP(100);
+                return;
+            }
+
+            const data = wrapUpQuestions[finalQ];
+            let btnHTML = '';
+            data.opts.forEach((opt, i) => {
+                btnHTML += `<button onclick="checkWrapUp(${i})" class="w-full text-left bg-slate-800 hover:bg-slate-700 text-white font-medium py-4 px-6 rounded-2xl transition border border-slate-700 shadow-sm text-lg">${opt}</button>`;
+            });
+
+            document.getElementById('wrapup-area').innerHTML = `
+                <div class="mb-8 text-left animate-[fadeIn_0.3s]">
+                    <span class="bg-indigo-600 text-white text-xs font-black px-3 py-1 rounded uppercase tracking-widest mb-4 inline-block">${data.type} Challenge</span>
+                    <h3 class="text-2xl font-medium text-white">${data.q}</h3>
+                </div>
+                <div class="flex flex-col gap-3">
+                    ${btnHTML}
+                </div>
+            `;
+        }
+
+        function checkWrapUp(guessIndex) {
+            if (guessIndex === wrapUpQuestions[finalQ].ans) {
+                showToast("Correct! Next question...", "success");
+                finalQ++;
+                setTimeout(renderWrapUpQuestion, 500);
+            } else {
+                showToast("Oops! Try again.", "error");
+            }
+        }
+
+        function finishClass() {
+            document.body.innerHTML += `
+            <div class="fixed inset-0 bg-slate-900/95 z-50 flex items-center justify-center p-4 backdrop-blur-md" onclick="this.remove()">
+                <div class="bg-white rounded-3xl p-12 text-center max-w-lg animate-[fadeIn_0.5s] shadow-2xl border-t-8 border-purple-500">
+                    <i class="fa-solid fa-graduation-cap text-8xl text-purple-500 mb-8 drop-shadow-lg"></i>
+                    <h2 class="text-4xl font-black text-slate-800 mb-4 tracking-tight font-display">Lesson Finished!</h2>
+                    <p class="text-slate-600 font-medium text-lg mb-4">You earned ${totalXP} XP today.</p>
+                    <p class="text-slate-600 font-medium">You can now confidently criticize terrible historical decisions.</p>
+                    <p class="text-sm text-slate-400 mt-8 uppercase tracking-widest font-bold">(Click anywhere to close)</p>
+                </div>
+            </div>`;
+        }
+
+        // Initialize components
+        window.addEventListener('DOMContentLoaded', () => {
+            renderVocabGrid();
+            renderMatchGame();
+            renderDrill();
+        });
+    </script>
+</body>
+</html>
